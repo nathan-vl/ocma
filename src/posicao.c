@@ -1,5 +1,4 @@
 #include "posicao.h"
-#include "acao.h"
 #include "mapa.h"
 #include <stdlib.h>
 

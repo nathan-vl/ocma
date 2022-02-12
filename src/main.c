@@ -1,4 +1,3 @@
-#include "acao.h"
 #include "area_pesca.h"
 #include "bot.h"
 #include "dados_iniciais.h"
