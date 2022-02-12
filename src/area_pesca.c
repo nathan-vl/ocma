@@ -4,48 +4,42 @@
 #include "posicao.h"
 #include <stdlib.h>
 
-struct AreaPesca parseAreaPesca(struct Posicao p, int v)
-{
-    return (struct AreaPesca){
-        .posicao = p,
-        .quantidade = parseQuantidadePeixe(v),
-        .peixe = parsePeixe(v)};
-}
-
 struct AreasPesca alocarAreasPesca(int quantidade)
 {
     return (struct AreasPesca){
         .quantidade = quantidade,
-        .areas = malloc(sizeof(struct AreaPesca) * quantidade)};
+        .peixes = malloc(sizeof(enum Peixe) * quantidade),
+        .posicoes = malloc(sizeof(struct Posicao) * quantidade),
+        .quantidadePeixes = malloc(sizeof(int) * quantidade)};
 }
 
-void copiarAreasPesca(struct AreasPesca destino, struct AreasPesca origem)
+void copiarAreasPesca(struct AreasPesca destino, struct AreasPesca origem, int quantidade)
 {
-    for (int i = 0; i < origem.quantidade; ++i)
+    for (int i = 0; i < quantidade; ++i)
     {
-        destino.areas[i] = origem.areas[i];
+        destino.peixes[i] = origem.peixes[i];
+        destino.posicoes[i] = origem.posicoes[i];
+        destino.quantidadePeixes[i] = origem.quantidadePeixes[i];
     }
 }
 
 struct AreasPesca alocarAreasPescaComBuffer(struct AreasPesca buffer)
 {
     struct AreasPesca areasPesca = alocarAreasPesca(buffer.quantidade);
-    copiarAreasPesca(areasPesca, buffer);
+    copiarAreasPesca(areasPesca, buffer, buffer.quantidade);
     return areasPesca;
 }
 
 int valorAreaPesca(
-    struct Posicao atual,
-    struct AreaPesca areaPesca,
-    struct Posicoes portos)
+    struct Posicao atual, struct Posicao posicaoAreaPesca,
+    enum Peixe peixe, int quantidade, struct Posicoes portos)
 {
     // -1 porque não pode pescar o último peixe, então não conta
-    const int valorBrutoLocal = valorPeixe(areaPesca.peixe) * (areaPesca.quantidade - 1);
+    const int valorBrutoLocal = valorPeixe(peixe) * (quantidade - 1);
 
-    const struct Posicao portoProximoDestino = maisPerto(areaPesca.posicao, portos);
+    const struct Posicao portoProximoDestino = maisPerto(posicaoAreaPesca, portos);
 
-    const int gastoDistancia = 50 * (calcDistanciaSimples(atual, areaPesca.posicao)
-        + calcDistanciaSimples(areaPesca.posicao, portoProximoDestino));
+    const int gastoDistancia = 50 * (calcDistanciaSimples(atual, posicaoAreaPesca) + calcDistanciaSimples(posicaoAreaPesca, portoProximoDestino));
 
     return valorBrutoLocal - gastoDistancia;
 }

@@ -49,10 +49,17 @@ void pescando(struct Mapa mapa, struct SituacaoJogo *situacaoJogo)
         situacaoJogo->destino = maisPerto(mapa.bots.posicao, mapa.portos);
         situacaoJogo->acaoAtual = INDO_VENDER;
     }
-    else if (mapa.areasPesca.areas)
+    else
     {
-        situacaoJogo->destino = melhorAreaPesca(mapa);
-        situacaoJogo->acaoAtual = INDO_PESCAR;
+        struct Posicoes posicoesAreaPesca = {
+            .posicoes = mapa.areasPesca.posicoes,
+            .quantidade = mapa.areasPesca.quantidade
+        };
+        if (!posicaoEstaEmPosicoes(situacaoJogo->destino, posicoesAreaPesca))
+        {
+            situacaoJogo->destino = melhorAreaPesca(mapa);
+            situacaoJogo->acaoAtual = INDO_PESCAR;
+        }
     }
 }
 
@@ -101,7 +108,9 @@ int main(void)
 
     outputDirecao(proximaDirecao(mapa, situacaoJogo.destino));
 
-    free(mapa.areasPesca.areas);
+    free(mapa.areasPesca.posicoes);
+    free(mapa.areasPesca.peixes);
+    free(mapa.areasPesca.quantidadePeixes);
     if (mapa.bots.adversarios.quantidade >= 1)
     {
         free(mapa.bots.adversarios.posicoes);
@@ -128,7 +137,9 @@ int main(void)
             break;
         }
 
-        free(mapa.areasPesca.areas);
+        free(mapa.areasPesca.posicoes);
+        free(mapa.areasPesca.peixes);
+        free(mapa.areasPesca.quantidadePeixes);
         if (mapa.bots.adversarios.quantidade >= 1)
         {
             free(mapa.bots.adversarios.posicoes);

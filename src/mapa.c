@@ -12,8 +12,11 @@ struct Mapa lerMapa(struct Posicao area)
     struct Posicao bufferPosicoesPortos[tamanho];
     int indicePorto = 0;
 
-    struct AreaPesca bufferAreasPesca[tamanho];
     int indiceAreaPesca = 0;
+    struct Posicao posicoesAreaPescaTemp[tamanho];
+    enum Peixe peixesTemp[tamanho];
+    int quantidadePeixesTemp[tamanho];
+
     for (int y = 0; y < area.altura; ++y)
     {
         for (int x = 0; x < area.largura; ++x)
@@ -30,7 +33,9 @@ struct Mapa lerMapa(struct Posicao area)
             }
             else if ((v >= 10) && (v % 10) > 1)
             {
-                bufferAreasPesca[indiceAreaPesca] = parseAreaPesca(posicaoAtual, v);
+                posicoesAreaPescaTemp[indiceAreaPesca] = posicaoAtual;
+                peixesTemp[indiceAreaPesca] = parsePeixe(v);
+                quantidadePeixesTemp[indiceAreaPesca] = parseQuantidadePeixe(v);
                 ++indiceAreaPesca;
             }
         }
@@ -45,10 +50,11 @@ struct Mapa lerMapa(struct Posicao area)
         portos.posicoes[i] = bufferPosicoesPortos[i];
     }
 
-    struct AreasPesca areasPesca = alocarAreasPescaComBuffer(
-        (struct AreasPesca){
-            .quantidade = indiceAreaPesca,
-            .areas = bufferAreasPesca});
+    struct AreasPesca areasPesca = alocarAreasPescaComBuffer((struct AreasPesca){
+        .quantidade = indiceAreaPesca,
+        .posicoes = posicoesAreaPescaTemp,
+        .peixes = peixesTemp,
+        .quantidadePeixes = quantidadePeixesTemp});
     return (struct Mapa){
         .area = area,
         .portos = portos,
@@ -59,8 +65,10 @@ struct AreasPesca lerAreasPesca(struct Posicao areaMapa)
 {
     int tamanho = areaMapa.altura * areaMapa.largura;
 
-    struct AreaPesca bufferAreasPesca[tamanho];
     int indiceAreaPesca = 0;
+    struct Posicao posicoesAreaPescaTemp[tamanho];
+    enum Peixe peixesTemp[tamanho];
+    int quantidadePeixesTemp[tamanho];
 
     for (int y = 0; y < areaMapa.altura; ++y)
     {
@@ -73,7 +81,9 @@ struct AreasPesca lerAreasPesca(struct Posicao areaMapa)
             // Apenas as áreas de pesca que tem mais de um peixe
             if ((v >= 10) && (v % 10) > 1)
             {
-                bufferAreasPesca[indiceAreaPesca] = parseAreaPesca(posicaoAtual, v);
+                posicoesAreaPescaTemp[indiceAreaPesca] = posicaoAtual;
+                peixesTemp[indiceAreaPesca] = parsePeixe(v);
+                quantidadePeixesTemp[indiceAreaPesca] = parseQuantidadePeixe(v);
                 ++indiceAreaPesca;
             }
         }
@@ -81,7 +91,9 @@ struct AreasPesca lerAreasPesca(struct Posicao areaMapa)
     scanf("%*c"); // Tira o /n do fluxo de entrada
     return alocarAreasPescaComBuffer((struct AreasPesca){
         .quantidade = indiceAreaPesca,
-        .areas = bufferAreasPesca});
+        .posicoes = posicoesAreaPescaTemp,
+        .peixes = peixesTemp,
+        .quantidadePeixes = quantidadePeixesTemp});
 }
 
 struct Posicao melhorAreaPesca(struct Mapa mapa)
@@ -91,13 +103,12 @@ struct Posicao melhorAreaPesca(struct Mapa mapa)
 
     for (int i = 0; i < mapa.areasPesca.quantidade; ++i)
     {
-        struct AreaPesca area = mapa.areasPesca.areas[i];
         if (!posicaoEstaEmPosicoes(mapa.bots.posicao, mapa.bots.adversarios))
         {
-            int valor = valorAreaPesca(mapa.bots.posicao, area, mapa.portos);
+            int valor = valorAreaPesca(mapa.bots.posicao, mapa.areasPesca.posicoes[i], mapa.areasPesca.peixes[i], mapa.areasPesca.quantidadePeixes[i], mapa.portos);
             if (valor > melhorValor)
             {
-                posMelhorAreaPesca = area.posicao;
+                posMelhorAreaPesca = mapa.areasPesca.posicoes[i];
                 melhorValor = valor;
             }
         }
