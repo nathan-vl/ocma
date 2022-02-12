@@ -1,4 +1,6 @@
 #include "bot.h"
+#include "direcao.h"
+#include "mapa.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
