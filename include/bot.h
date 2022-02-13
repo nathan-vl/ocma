@@ -9,6 +9,7 @@ struct Bots
     struct Posicoes adversarios;
 };
 
+void lerIdBot(char *destino);
 struct Bots lerBots(char *idBot);
 
 #endif

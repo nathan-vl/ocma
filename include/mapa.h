@@ -13,6 +13,7 @@ struct Mapa
     struct Bots bots;
 };
 
+struct Posicao lerTamanhoMapa(void);
 struct Mapa lerMapa(struct Posicao area);
 struct AreasPesca lerAreasPesca(struct Posicao areaMapa);
 struct Posicao melhorAreaPesca(struct Mapa mapa);

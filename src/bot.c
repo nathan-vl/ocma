@@ -5,6 +5,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+void lerIdBot(char *destino)
+{
+    char buffer[15];
+    fgets(buffer, 15, stdin);
+    sscanf(buffer, "ID %s", destino);
+}
+
 int lerQuantidadeBots(void)
 {
     int quantidade;

@@ -1,7 +1,6 @@
 #include "acao.h"
 #include "area_pesca.h"
 #include "bot.h"
-#include "dados_iniciais.h"
 #include "direcao.h"
 #include "mapa.h"
 #include <stdio.h>

@@ -5,6 +5,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+struct Posicao lerTamanhoMapa(void)
+{
+    struct Posicao tamanho;
+
+    char buffer[50];
+    fgets(buffer, 50, stdin);
+    sscanf(buffer, "AREA %i %i",
+           &tamanho.altura, &tamanho.largura);
+
+    return tamanho;
+}
+
 struct Mapa lerMapa(struct Posicao area)
 {
     const int tamanho = area.largura * area.altura;
