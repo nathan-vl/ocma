@@ -4,6 +4,6 @@ Esse é um bot de pesca para o projeto [ocma](https://github.com/amccampos/ocma)
 
 ## Compilação
 
-É necessário que `make` esteja presente no sistema. Execute `make` no diretório deste arquivo para gerar o executável.
+É necessário que `make` esteja presente no sistema. Execute `make` no diretório raiz do projeto para gerar os objetos e o executável, que estarão disponíveis na pasta `build`.
 
 Para remover os arquivos que foram gerados no processo execute `make clean`.

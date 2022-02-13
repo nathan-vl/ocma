@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Iinclude -O3 #-g -Wall -Wextra -Wfloat-equal -Wpedantic -fsanitize=address
+CFLAGS = -Iinclude -O3
 
 BUILD = build
 
@@ -12,7 +12,7 @@ OUT_OBJ = bot-pesca
 	$(CC) $(CFLAGS) -c -o $@ $(patsubst $(BUILD)/%.o,src/%.c,$@)
 
 $(OUT_OBJ): makeBuildDir $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $@
+	$(CC) $(CFLAGS) $(OBJS) -o $(BUILD)/$@
 
 makeBuildDir:
 	mkdir -p $(BUILD)
