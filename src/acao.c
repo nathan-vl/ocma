@@ -61,7 +61,7 @@ void vendendo(struct Mapa mapa, struct SituacaoJogo *situacaoJogo)
 
     char buffer[10];
     fgets(buffer, 10, stdin);
-    // Valor descartado
+    sscanf(buffer, "%i", &situacaoJogo->dinheiro);
 
     situacaoJogo->capacidade = 0;
     situacaoJogo->destino = melhorAreaPesca(mapa);
