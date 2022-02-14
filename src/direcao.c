@@ -58,7 +58,7 @@ _Bool podeAndarEmDirecao(struct Mapa mapa, enum Direcao direcao)
     return dentroMapa(mapa.area, destino) && (posicaoEstaEmPosicoes(destino, mapa.portos) || !posicaoEstaEmPosicoes(destino, mapa.bots.adversarios));
 }
 
-enum Direcao proximaDirecao(struct Mapa mapa, struct Posicao destino)
+enum Direcao calcularProximaDirecao(struct Mapa mapa, struct Posicao destino)
 {
     int dInicial = calcDistanciaSimples(mapa.bots.posicao, destino);
     for (enum Direcao d = 0; d < 4; ++d)

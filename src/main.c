@@ -26,7 +26,7 @@ int main(void)
         .destino = melhorAreaPesca(mapa),
         .capacidade = 0};
 
-    outputDirecao(proximaDirecao(mapa, situacaoJogo.destino));
+    outputDirecao(calcularProximaDirecao(mapa, situacaoJogo.destino));
 
     free(mapa.areasPesca.posicoes);
     free(mapa.areasPesca.peixes);

@@ -11,7 +11,7 @@ void indoPescar(struct Mapa mapa, struct SituacaoJogo *situacaoJogo)
         situacaoJogo->destino = melhorAreaPesca(mapa);
     }
 
-    enum Direcao d = proximaDirecao(mapa, situacaoJogo->destino);
+    enum Direcao d = calcularProximaDirecao(mapa, situacaoJogo->destino);
     outputDirecao(d);
     if (posicoesSaoIguais(addDirecao(mapa.bots.posicao, d), situacaoJogo->destino))
     {
@@ -47,7 +47,7 @@ void pescando(struct Mapa mapa, struct SituacaoJogo *situacaoJogo)
 
 void indoVender(struct Mapa mapa, struct SituacaoJogo *situacaoJogo)
 {
-    enum Direcao d = proximaDirecao(mapa, situacaoJogo->destino);
+    enum Direcao d = calcularProximaDirecao(mapa, situacaoJogo->destino);
     outputDirecao(d);
     if (posicoesSaoIguais(addDirecao(mapa.bots.posicao, d), situacaoJogo->destino))
     {

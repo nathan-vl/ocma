@@ -23,6 +23,6 @@ enum Direcao
 enum ResultadoDirecao outputDirecao(enum Direcao direcao);
 struct Posicao addDirecao(struct Posicao posicao, enum Direcao direcao);
 _Bool podeAndarEmDirecao(struct Mapa mapa, enum Direcao direcao);
-enum Direcao proximaDirecao(struct Mapa mapa, struct Posicao destino);
+enum Direcao calcularProximaDirecao(struct Mapa mapa, struct Posicao destino);
 
 #endif

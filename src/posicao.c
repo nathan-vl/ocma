@@ -1,6 +1,4 @@
 #include "posicao.h"
-#include "mapa.h"
-#include <stdlib.h>
 
 int abs(int n)
 {
@@ -24,17 +22,17 @@ _Bool posicoesSaoIguais(struct Posicao p1, struct Posicao p2)
     return (p1.altura == p2.altura) && (p1.largura == p2.largura);
 }
 
-struct Posicao maisPerto(struct Posicao inicio, struct Posicoes alvos)
+struct Posicao maisPerto(struct Posicao posicao, struct Posicoes posicoes)
 {
-    int menorDistancia = calcDistanciaSimples(inicio, alvos.posicoes[0]);
-    struct Posicao p = alvos.posicoes[0];
+    struct Posicao p = posicoes.posicoes[0];
+    int menorDistancia = calcDistanciaSimples(posicao, posicoes.posicoes[0]);
 
-    for (int i = 1; i < alvos.quantidade; ++i)
+    for (int i = 1; i < posicoes.quantidade; ++i)
     {
-        int distancia = calcDistanciaSimples(inicio, alvos.posicoes[i]);
+        int distancia = calcDistanciaSimples(posicao, posicoes.posicoes[i]);
         if (distancia < menorDistancia)
         {
-            p = alvos.posicoes[i];
+            p = posicoes.posicoes[i];
             menorDistancia = distancia;
         }
     }
