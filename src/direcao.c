@@ -55,20 +55,7 @@ _Bool podeAndarEmDirecao(struct Mapa mapa, enum Direcao direcao)
 {
     const struct Posicao destino = addDirecao(mapa.bots.posicao, direcao);
 
-    if (!dentroMapa(mapa.area, destino))
-    {
-        return 0;
-    }
-
-    for (int i = 0; i < mapa.portos.quantidade; ++i)
-    {
-        if (posicoesSaoIguais(destino, mapa.portos.posicoes[i]))
-        {
-            return 1;
-        }
-    }
-
-    return !posicaoEstaEmPosicoes(destino, mapa.bots.adversarios);
+    return dentroMapa(mapa.area, destino) && (posicaoEstaEmPosicoes(destino, mapa.portos) || !posicaoEstaEmPosicoes(destino, mapa.bots.adversarios));
 }
 
 enum Direcao proximaDirecao(struct Mapa mapa, struct Posicao destino)
