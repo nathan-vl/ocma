@@ -6,7 +6,7 @@
 
 void indoPescar(struct Mapa mapa, struct SituacaoJogo *situacaoJogo)
 {
-    if (posicaoEstaEmPosicoes(mapa.bots.posicao, mapa.bots.adversarios))
+    if (posicaoEstaEmPosicoes(situacaoJogo->destino, mapa.bots.adversarios))
     {
         situacaoJogo->destino = melhorAreaPesca(mapa);
     }
