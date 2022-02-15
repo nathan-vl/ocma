@@ -24,7 +24,9 @@ int main(void)
     struct SituacaoJogo situacaoJogo = {
         .acao = INDO_PESCAR,
         .destino = melhorAreaPesca(mapa),
-        .capacidade = 0};
+        .quantidadeCioba = 0,
+        .quantidadeRobalo = 0,
+        .quantidadeTainha = 0};
 
     outputDirecao(calcularProximaDirecao(mapa, situacaoJogo.destino));
 

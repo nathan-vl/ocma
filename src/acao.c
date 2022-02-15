@@ -22,26 +22,37 @@ void indoPescar(struct Mapa mapa, struct SituacaoJogo *situacaoJogo)
 void pescando(struct Mapa mapa, struct SituacaoJogo *situacaoJogo)
 {
     printf("FISH\n");
-    situacaoJogo->capacidade += 1;
 
     char buffer[10];
-    fgets(buffer, 10, stdin); // Tipo do peixe descartado
+    fgets(buffer, 10, stdin);
+    switch (buffer[1])
+    {
+    case 'N':
+        situacaoJogo->quantidadeCioba += 1;
+        break;
+    case 'E':
+        situacaoJogo->quantidadeRobalo += 1;
+        break;
+    case 'U':
+        situacaoJogo->quantidadeTainha += 1;
+    }
 
-    if (situacaoJogo->capacidade >= 10)
+    int capacidadeAtual = situacaoJogo->quantidadeCioba + situacaoJogo->quantidadeRobalo + situacaoJogo->quantidadeTainha;
+    int valorBruto = situacaoJogo->dinheiro + situacaoJogo->quantidadeCioba * 150 + situacaoJogo->quantidadeRobalo * 200 + situacaoJogo->quantidadeTainha * 100;
+    if (capacidadeAtual >= 10 || valorBruto >= 10000)
     {
         situacaoJogo->destino = maisPerto(mapa.bots.posicao, mapa.portos);
         situacaoJogo->acao = INDO_VENDER;
+        return;
     }
-    else
+
+    struct Posicoes posicoesAreaPesca = {
+        .posicoes = mapa.areasPesca.posicoes,
+        .quantidade = mapa.areasPesca.quantidade};
+    if (!posicaoEstaEmPosicoes(situacaoJogo->destino, posicoesAreaPesca))
     {
-        struct Posicoes posicoesAreaPesca = {
-            .posicoes = mapa.areasPesca.posicoes,
-            .quantidade = mapa.areasPesca.quantidade};
-        if (!posicaoEstaEmPosicoes(situacaoJogo->destino, posicoesAreaPesca))
-        {
-            situacaoJogo->destino = melhorAreaPesca(mapa);
-            situacaoJogo->acao = INDO_PESCAR;
-        }
+        situacaoJogo->destino = melhorAreaPesca(mapa);
+        situacaoJogo->acao = INDO_PESCAR;
     }
 }
 
@@ -63,7 +74,10 @@ void vendendo(struct Mapa mapa, struct SituacaoJogo *situacaoJogo)
     fgets(buffer, 10, stdin);
     sscanf(buffer, "%i", &situacaoJogo->dinheiro);
 
-    situacaoJogo->capacidade = 0;
+    situacaoJogo->quantidadeCioba = 0;
+    situacaoJogo->quantidadeRobalo = 0;
+    situacaoJogo->quantidadeTainha = 0;
+
     situacaoJogo->destino = melhorAreaPesca(mapa);
     situacaoJogo->acao = INDO_PESCAR;
 }

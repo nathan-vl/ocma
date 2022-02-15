@@ -15,7 +15,9 @@ enum Acao
 struct SituacaoJogo
 {
     int dinheiro;
-    int capacidade;
+    int quantidadeCioba;
+    int quantidadeRobalo;
+    int quantidadeTainha;
     struct Posicao destino;
     enum Acao acao;
 };
