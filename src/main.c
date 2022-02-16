@@ -21,14 +21,14 @@ int main(void)
     struct Mapa mapa = lerMapa(tamanhoMapa);
     mapa.bots = lerBots(idBot);
 
-    struct SituacaoJogo situacaoJogo = {
+    struct MeuBot meuBot = {
         .acao = INDO_PESCAR,
         .destino = melhorAreaPesca(mapa),
         .quantidadeCioba = 0,
         .quantidadeRobalo = 0,
         .quantidadeTainha = 0};
 
-    outputDirecao(calcularProximaDirecao(mapa, situacaoJogo.destino));
+    outputDirecao(calcularProximaDirecao(mapa, meuBot.destino));
 
     free(mapa.areasPesca.posicoes);
     free(mapa.areasPesca.peixes);
@@ -41,7 +41,7 @@ int main(void)
 
     while (1)
     {
-        realizarAcao(&mapa, idBot, &situacaoJogo);
+        realizarAcao(&mapa, idBot, &meuBot);
     }
 
     // Sei que esse trecho não será executado

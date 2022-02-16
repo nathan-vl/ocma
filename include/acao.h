@@ -12,7 +12,7 @@ enum Acao
     VENDENDO
 };
 
-struct SituacaoJogo
+struct MeuBot
 {
     int dinheiro;
     int quantidadeCioba;
@@ -22,6 +22,6 @@ struct SituacaoJogo
     enum Acao acao;
 };
 
-void realizarAcao(struct Mapa *mapa, char *idBot, struct SituacaoJogo *situacaoJogo);
+void realizarAcao(struct Mapa *mapa, char *idBot, struct MeuBot *meuBot);
 
 #endif

@@ -4,22 +4,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void indoPescar(struct Mapa mapa, struct SituacaoJogo *situacaoJogo)
+void indoPescar(struct Mapa mapa, struct MeuBot *meuBot)
 {
-    if (posicaoEstaEmPosicoes(situacaoJogo->destino, mapa.bots.adversarios))
+    if (posicaoEstaEmPosicoes(meuBot->destino, mapa.bots.adversarios))
     {
-        situacaoJogo->destino = melhorAreaPesca(mapa);
+        meuBot->destino = melhorAreaPesca(mapa);
     }
 
-    enum Direcao d = calcularProximaDirecao(mapa, situacaoJogo->destino);
+    enum Direcao d = calcularProximaDirecao(mapa, meuBot->destino);
     outputDirecao(d);
-    if (posicoesSaoIguais(addDirecao(mapa.bots.posicao, d), situacaoJogo->destino))
+    if (posicoesSaoIguais(addDirecao(mapa.bots.posicao, d), meuBot->destino))
     {
-        situacaoJogo->acao = PESCANDO;
+        meuBot->acao = PESCANDO;
     }
 }
 
-void pescando(struct Mapa mapa, struct SituacaoJogo *situacaoJogo)
+void pescando(struct Mapa mapa, struct MeuBot *meuBot)
 {
     printf("FISH\n");
 
@@ -28,78 +28,78 @@ void pescando(struct Mapa mapa, struct SituacaoJogo *situacaoJogo)
     switch (buffer[1])
     {
     case 'N':
-        situacaoJogo->quantidadeCioba += 1;
+        meuBot->quantidadeCioba += 1;
         break;
     case 'E':
-        situacaoJogo->quantidadeRobalo += 1;
+        meuBot->quantidadeRobalo += 1;
         break;
     case 'U':
-        situacaoJogo->quantidadeTainha += 1;
+        meuBot->quantidadeTainha += 1;
     }
 
-    int capacidadeAtual = situacaoJogo->quantidadeCioba + situacaoJogo->quantidadeRobalo + situacaoJogo->quantidadeTainha;
-    int valorBruto = situacaoJogo->dinheiro + situacaoJogo->quantidadeCioba * 150 + situacaoJogo->quantidadeRobalo * 200 + situacaoJogo->quantidadeTainha * 100;
+    int capacidadeAtual = meuBot->quantidadeCioba + meuBot->quantidadeRobalo + meuBot->quantidadeTainha;
+    int valorBruto = meuBot->dinheiro + meuBot->quantidadeCioba * 150 + meuBot->quantidadeRobalo * 200 + meuBot->quantidadeTainha * 100;
     if (capacidadeAtual >= 10 || valorBruto >= 10000)
     {
-        situacaoJogo->destino = maisPerto(mapa.bots.posicao, mapa.portos);
-        situacaoJogo->acao = INDO_VENDER;
+        meuBot->destino = maisPerto(mapa.bots.posicao, mapa.portos);
+        meuBot->acao = INDO_VENDER;
         return;
     }
 
     struct Posicoes posicoesAreaPesca = {
         .posicoes = mapa.areasPesca.posicoes,
         .quantidade = mapa.areasPesca.quantidade};
-    if (!posicaoEstaEmPosicoes(situacaoJogo->destino, posicoesAreaPesca))
+    if (!posicaoEstaEmPosicoes(meuBot->destino, posicoesAreaPesca))
     {
-        situacaoJogo->destino = melhorAreaPesca(mapa);
-        situacaoJogo->acao = INDO_PESCAR;
+        meuBot->destino = melhorAreaPesca(mapa);
+        meuBot->acao = INDO_PESCAR;
     }
 }
 
-void indoVender(struct Mapa mapa, struct SituacaoJogo *situacaoJogo)
+void indoVender(struct Mapa mapa, struct MeuBot *meuBot)
 {
-    enum Direcao d = calcularProximaDirecao(mapa, situacaoJogo->destino);
+    enum Direcao d = calcularProximaDirecao(mapa, meuBot->destino);
     outputDirecao(d);
-    if (posicoesSaoIguais(addDirecao(mapa.bots.posicao, d), situacaoJogo->destino))
+    if (posicoesSaoIguais(addDirecao(mapa.bots.posicao, d), meuBot->destino))
     {
-        situacaoJogo->acao = VENDENDO;
+        meuBot->acao = VENDENDO;
     }
 }
 
-void vendendo(struct Mapa mapa, struct SituacaoJogo *situacaoJogo)
+void vendendo(struct Mapa mapa, struct MeuBot *meuBot)
 {
     printf("SELL\n");
 
     char buffer[10];
     fgets(buffer, 10, stdin);
-    sscanf(buffer, "%i", &situacaoJogo->dinheiro);
+    sscanf(buffer, "%i", &meuBot->dinheiro);
 
-    situacaoJogo->quantidadeCioba = 0;
-    situacaoJogo->quantidadeRobalo = 0;
-    situacaoJogo->quantidadeTainha = 0;
+    meuBot->quantidadeCioba = 0;
+    meuBot->quantidadeRobalo = 0;
+    meuBot->quantidadeTainha = 0;
 
-    situacaoJogo->destino = melhorAreaPesca(mapa);
-    situacaoJogo->acao = INDO_PESCAR;
+    meuBot->destino = melhorAreaPesca(mapa);
+    meuBot->acao = INDO_PESCAR;
 }
 
-void realizarAcao(struct Mapa *mapa, char *idBot, struct SituacaoJogo *situacaoJogo)
+void realizarAcao(struct Mapa *mapa, char *idBot, struct MeuBot *meuBot)
 {
     mapa->areasPesca = lerAreasPesca(mapa->area);
     mapa->bots = lerBots(idBot);
 
-    switch (situacaoJogo->acao)
+    switch (meuBot->acao)
     {
     case INDO_PESCAR:
-        indoPescar(*mapa, situacaoJogo);
+        indoPescar(*mapa, meuBot);
         break;
     case PESCANDO:
-        pescando(*mapa, situacaoJogo);
+        pescando(*mapa, meuBot);
         break;
     case INDO_VENDER:
-        indoVender(*mapa, situacaoJogo);
+        indoVender(*mapa, meuBot);
         break;
     case VENDENDO:
-        vendendo(*mapa, situacaoJogo);
+        vendendo(*mapa, meuBot);
         break;
     }
 
